@@ -1,0 +1,14 @@
+name: "Extract OpenAPI Endpoints"
+description: "A GitHub Action to extract and print endpoints from an OpenAPI YAML file"
+author: "Roger Contreras"
+inputs:
+  file:
+    description: "Path to the OpenAPI YAML file"
+    required: true
+    default: "openapi.yml"
+outputs:
+  endpoints:
+    description: "List of extracted endpoints"
+runs:
+  using: "node20"
+  main: "dist/index.js"
