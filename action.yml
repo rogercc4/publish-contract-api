@@ -6,6 +6,18 @@ inputs:
     description: "Path to the OpenAPI YAML file"
     required: true
     default: "openapi.yml"
+  github_token:
+    description: "GitHub token for authentication"
+    required: true
+  api_url_getport:
+    description: "API URL for GetPort"
+    required: true
+  client_id_getport:
+    description: "Client ID for GetPort"
+    required: true
+  client_secret_getport:
+    description: "Client Secret for GetPort"
+    required: true
 outputs:
   endpoints:
     description: "List of extracted endpoints"
