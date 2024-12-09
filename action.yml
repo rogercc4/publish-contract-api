@@ -1,5 +1,5 @@
 name: "Extract OpenAPI Endpoints"
-description: "A GitHub Action to extract and print endpoints from an OpenAPI YAML file"
+description: "A GitHub Action to extract endpoints from an OpenAPI YAML file and upload into a IDP"
 author: "Roger Contreras"
 inputs:
   file:
