@@ -9,9 +9,11 @@ async function run(): Promise<void> {
 
     const repoName = process.env.GITHUB_REPOSITORY;
     const serverUrl = process.env.GITHUB_SERVER_URL || "https://github.com";
-    
     const repoUrl = `${serverUrl}/${repoName}`;
     const commitSha = process.env.GITHUB_SHA || "";
+
+    core.info(`repoUrl: ${repoUrl}`);
+    core.info(`commitSha: ${commitSha}`);
 
     // Obtener el nombre del usuario que hizo el último commit
     const octokit = github.getOctokit(core.getInput("github_token"));
@@ -23,6 +25,8 @@ async function run(): Promise<void> {
 
     const commitAuthor = commitData.commit.author?.name || "Unknown author";
 
+    core.info(`commitAuthor: ${commitAuthor}`);
+
     // Leer el archivo proporcionado como entrada
     const filePath: string = core.getInput("file");
 
@@ -32,8 +36,8 @@ async function run(): Promise<void> {
       return;
     }
 
-    const openApiParserService = new OpenApiParserService(filePath);
-    openApiParserService.printEndpoints();
+    const parser = new OpenApiParserService(filePath);
+    parser.printEndpoints();
 
     const apiUrl = core.getInput("api_url_getport");
     const clientId = core.getInput("client_id_getport");
@@ -42,11 +46,11 @@ async function run(): Promise<void> {
     const uploader = new BlueprintCatalogService(apiUrl, clientId, clientSecret);
 
     // Leer el archivo YAML
-    const apiMockBlueprintDto = openApiParserService.getApiMockBlueprintDto(commitAuthor, repoUrl, commitSha);
+    const apiMockBlueprintDto = parser.getApiMockBlueprintDto(commitAuthor, repoUrl, commitSha);
     await uploader.addItem("api_mock", apiMockBlueprintDto);
     core.info(`API Mock uploaded successfully into GetPort: ${apiMockBlueprintDto.properties.name}`);
 
-    openApiParserService.getOperationsMockBlueprintDto(apiMockBlueprintDto.identifier).forEach(async (operationItem) => {
+    parser.getOperationsMockBlueprintDto(apiMockBlueprintDto.identifier).forEach(async (operationItem) => {
       const result = await uploader.addItem('operation_mock', operationItem);
       core.info(`Operation Mock uploaded successfully into GetPort: ${result}`);
     });
