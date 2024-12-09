@@ -1,9 +1,28 @@
 import * as fs from "fs";
 import * as core from "@actions/core";
-import * as yaml from "js-yaml";
+import * as github from "@actions/github";
+import OpenApiParserService from "./service/openApiParserService";
+import BlueprintCatalogService from "./service/blueprintCatalogService";
 
 async function run(): Promise<void> {
   try {
+
+    const repoName = process.env.GITHUB_REPOSITORY;
+    const serverUrl = process.env.GITHUB_SERVER_URL || "https://github.com";
+    
+    const repoUrl = `${serverUrl}/${repoName}`;
+    const commitSha = process.env.GITHUB_SHA || "";
+
+    // Obtener el nombre del usuario que hizo el último commit
+    const octokit = github.getOctokit(core.getInput("github_token"));
+    const { data: commitData } = await octokit.rest.repos.getCommit({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      ref: commitSha,
+    });
+
+    const commitAuthor = commitData.commit.author?.name || "Unknown author";
+
     // Leer el archivo proporcionado como entrada
     const filePath: string = core.getInput("file");
 
@@ -13,26 +32,25 @@ async function run(): Promise<void> {
       return;
     }
 
-    // Cargar el archivo YAML
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const openApiDoc = yaml.load(fileContents) as Record<string, any>;
+    const openApiParserService = new OpenApiParserService(filePath);
+    openApiParserService.printEndpoints();
 
-    // Extraer los endpoints
-    const paths = openApiDoc.paths || {};
-    const endpoints: string[] = [];
+    const apiUrl = core.getInput("api_url_getport");
+    const clientId = core.getInput("client_id_getport");
+    const clientSecret = core.getInput("client_secret_getport");
 
-    for (const [path, methods] of Object.entries(paths)) {
-      for (const method of Object.keys(methods as Record<string, any>)) {
-        endpoints.push(`${method.toUpperCase()} ${path}`);
-      }
-    }
+    const uploader = new BlueprintCatalogService(apiUrl, clientId, clientSecret);
 
-    // Imprimir los endpoints en el log
-    core.info("Extracted Endpoints:");
-    endpoints.forEach((endpoint) => core.info(endpoint));
+    // Leer el archivo YAML
+    const apiMockBlueprintDto = openApiParserService.getApiMockBlueprintDto(commitAuthor, repoUrl, commitSha);
+    await uploader.addItem("api_mock", apiMockBlueprintDto);
+    core.info(`API Mock uploaded successfully into GetPort: ${apiMockBlueprintDto.properties.name}`);
 
-    // Establecer los endpoints como una salida
-    core.setOutput("endpoints", JSON.stringify(endpoints));
+    openApiParserService.getOperationsMockBlueprintDto(apiMockBlueprintDto.identifier).forEach(async (operationItem) => {
+      const result = await uploader.addItem('operation_mock', operationItem);
+      core.info(`Operation Mock uploaded successfully into GetPort: ${result}`);
+    });
+
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message);
