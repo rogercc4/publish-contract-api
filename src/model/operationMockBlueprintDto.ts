@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class OperationMockBlueprintDto {
-    identifier: string = uuidv4();
+    identifier: string;
     title: string;
     properties: {
       http_method: string;
@@ -13,13 +13,13 @@ export class OperationMockBlueprintDto {
     }
   
     constructor(
-      title: string,
       http_method: string,
       url_endpoint: string,
       total_mocks: number,
       id_api_mock: string
     ) {
-      this.title = title;
+      this.identifier = http_method + ' ' + url_endpoint;
+      this.title = this.identifier;
       this.properties = {
         http_method: http_method,
         url_endpoint: url_endpoint,

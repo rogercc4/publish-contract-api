@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class ApiMockBlueprintDto {
-  identifier: string = uuidv4();  
+  identifier: string;  
   title: string;
   properties: {
     name: string;
@@ -29,6 +29,7 @@ export class ApiMockBlueprintDto {
         url_repo_microservice?: string;
       }
     ) {
+      this.identifier = properties.name + '-' + properties.version;
       this.title = title;
       this.properties = properties;
     }

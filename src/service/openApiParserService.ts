@@ -76,7 +76,7 @@ class OpenApiParserService {
             if (paths.hasOwnProperty(path)) {
                 const methods = Object.keys(paths[path]);
                 methods.forEach(method => {
-                    const operation = new OperationMockBlueprintDto("Operation mock", method.toUpperCase(), path, 0, id_api_mock );
+                    const operation = new OperationMockBlueprintDto(method.toUpperCase(), path, 0, id_api_mock );
                     operations.push(operation);
                 });
             }
