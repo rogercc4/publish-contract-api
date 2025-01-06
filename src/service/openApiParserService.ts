@@ -64,7 +64,7 @@ class OpenApiParserService {
             url_repo_microservice: url_repo_microservice
         };
 
-        return new ApiMockBlueprintDto(this.openApiDoc.info.title, properties);
+        return new ApiMockBlueprintDto(properties);
     }
 
 
