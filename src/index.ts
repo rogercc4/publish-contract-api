@@ -50,7 +50,7 @@ async function run(): Promise<void> {
     const blueprintCatalogService = new BlueprintCatalogService(apiUrlGetPort, clientIdGetPort, clientSecretGetPort);
     const publishContractService = new PublishContractService(filePath, microcksService, blueprintCatalogService);
 
-    publishContractService.publishApiMock(commitAuthor, repoUrl, commitSha, '');
+    publishContractService.publishApiMock(commitAuthor, repoUrl, commitSha);
 
   } catch (error) {
     if (error instanceof Error) {

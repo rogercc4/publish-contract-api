@@ -33,10 +33,10 @@ jobs:
         with:
           file: 'path/to/your/openapi.yml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          api_url_getport: ${{ secrets.API_URL_GETPORT }}
+          api_url_getport: ${{ vars.API_URL_GETPORT }}
           client_id_getport: ${{ secrets.CLIENT_ID_GETPORT }}
           client_secret_getport: ${{ secrets.CLIENT_SECRET_GETPORT }}
-          api_url_microcks: ${{ secrets.API_URL_MICROCKS }}
-          api_url_keycloack: ${{ secrets.API_URL_KEYCLOACK }}
+          api_url_microcks: ${{ vars.API_URL_MICROCKS }}
+          api_url_keycloack: ${{ vars.API_URL_KEYCLOACK }}
           client_id_microcks: ${{ secrets.CLIENT_ID_MICROCKS }}
           client_secret_microcks: ${{ secrets.CLIENT_SECRET_MICROCKS }}
