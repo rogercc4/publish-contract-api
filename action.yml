@@ -18,9 +18,23 @@ inputs:
   client_secret_getport:
     description: "Client Secret for GetPort"
     required: true
-outputs:
-  endpoints:
-    description: "List of extracted endpoints"
+
+  api_url_microcks:
+    description: "API URL for Microcks"
+    required: true
+  realm_keycloack:
+    description: "Name of the Realm corresponding to Microcks"
+    required: true
+    default: "microcks"
+  api_url_keycloack:
+    description: "API URL for Keycloack"
+    required: true
+  client_id_microcks:
+    description: "Client ID for Microcks"
+    required: true
+  client_secret_microcks:
+    description: "Client Secret for Microcks"
+    required: true
 runs:
   using: "node20"
   main: "dist/index.js"

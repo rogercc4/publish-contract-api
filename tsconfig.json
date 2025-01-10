@@ -5,7 +5,9 @@
       "outDir": "dist",
       "strict": true,
       "esModuleInterop": true,
-      "typeRoots": ["node_modules/@types"]
+      "typeRoots": ["node_modules/@types"],
+      "sourceMap": true
+
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules","test"]

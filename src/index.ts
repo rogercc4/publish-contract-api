@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import OpenApiParserService from "./service/openApiParserService";
 import BlueprintCatalogService from "./service/blueprintCatalogService";
+import MicrocksApiService from "./service/microcksApiService";
+import PublishContractService from "./service/publishContractService";
 
 async function run(): Promise<void> {
   try {
@@ -36,24 +37,21 @@ async function run(): Promise<void> {
       return;
     }
 
-    const parser = new OpenApiParserService(filePath);
-    parser.printEndpoints();
+    const apiUrlGetPort = core.getInput("api_url_getport");
+    const clientIdGetPort = core.getInput("client_id_getport");
+    const clientSecretGetPort = core.getInput("client_secret_getport");
 
-    const apiUrl = core.getInput("api_url_getport");
-    const clientId = core.getInput("client_id_getport");
-    const clientSecret = core.getInput("client_secret_getport");
+    const apiUrlMicrocks = core.getInput("api_url_microcks");
+    const realm = core.getInput("realm_keycloack");
+    const apiUrlKeycloak = core.getInput("api_url_keycloack");
+    const clientIdMicrocks = core.getInput("client_id_microcks");
+    const clientSecretMicrocks = core.getInput("client_secret_microcks");
 
-    const uploader = new BlueprintCatalogService(apiUrl, clientId, clientSecret);
+    const microcksService = new MicrocksApiService(apiUrlMicrocks, realm, apiUrlKeycloak, clientIdMicrocks, clientSecretMicrocks);
+    const blueprintCatalogService = new BlueprintCatalogService(apiUrlGetPort, clientIdGetPort, clientSecretGetPort);
+    const publishContractService = new PublishContractService(filePath, microcksService, blueprintCatalogService);
 
-    // Leer el archivo YAML
-    const apiMockBlueprintDto = parser.getApiMockBlueprintDto(commitAuthor, repoUrl, commitSha);
-    await uploader.addItem("api_mock", apiMockBlueprintDto);
-    core.info(`API Mock uploaded successfully into GetPort: ${apiMockBlueprintDto.properties.name}`);
-
-    parser.getOperationsMockBlueprintDto(apiMockBlueprintDto.identifier).forEach(async (operationItem) => {
-      const result = await uploader.addItem('operation_mock', operationItem);
-      core.info(`Operation Mock uploaded successfully into GetPort: ${result}`);
-    });
+    publishContractService.publishApiMock(commitAuthor, repoUrl, commitSha, '');
 
   } catch (error) {
     if (error instanceof Error) {

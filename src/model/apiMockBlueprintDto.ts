@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
 
 export class ApiMockBlueprintDto {
-  identifier: string = uuidv4();  
+  identifier: string;  
   title: string;
   properties: {
     name: string;
@@ -16,6 +15,7 @@ export class ApiMockBlueprintDto {
   };
   
     constructor(
+      identifier: string,
       properties: {
         name: string;
         type_service: string;
@@ -28,6 +28,7 @@ export class ApiMockBlueprintDto {
         url_repo_microservice?: string;
       }
     ) {
+      this.identifier = identifier;
       this.title = properties.name + ' | Version:' + properties.version;
       this.properties = properties;
     }
