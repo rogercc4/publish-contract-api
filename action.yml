@@ -18,14 +18,9 @@ inputs:
   client_secret_getport:
     description: "Client Secret for GetPort"
     required: true
-
   api_url_microcks:
     description: "API URL for Microcks"
     required: true
-  realm_keycloack:
-    description: "Name of the Realm corresponding to Microcks"
-    required: true
-    default: "microcks"
   api_url_keycloack:
     description: "API URL for Keycloack"
     required: true

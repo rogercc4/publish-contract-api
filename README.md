@@ -10,7 +10,6 @@ A GitHub Action to extract endpoints from an OpenAPI YAML file and upload into a
 - `client_id_getport`: Client ID for GetPort
 - `client_secret_getport`: Client Secret for GetPort
 - `api_url_microcks`: API URL for Microcks
-- `realm_keycloack`: Name of the Realm corresponding to Microcks (default: `microcks`)
 - `api_url_keycloack`: API URL for Keycloack
 - `client_id_microcks`: Client ID for Microcks
 - `client_secret_microcks`: Client Secret for Microcks
@@ -38,7 +37,6 @@ jobs:
           client_id_getport: ${{ secrets.CLIENT_ID_GETPORT }}
           client_secret_getport: ${{ secrets.CLIENT_SECRET_GETPORT }}
           api_url_microcks: ${{ secrets.API_URL_MICROCKS }}
-          realm_keycloack: ${{ secrets.REALM_KEYCLOACK }}
           api_url_keycloack: ${{ secrets.API_URL_KEYCLOACK }}
           client_id_microcks: ${{ secrets.CLIENT_ID_MICROCKS }}
           client_secret_microcks: ${{ secrets.CLIENT_SECRET_MICROCKS }}

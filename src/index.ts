@@ -42,12 +42,11 @@ async function run(): Promise<void> {
     const clientSecretGetPort = core.getInput("client_secret_getport");
 
     const apiUrlMicrocks = core.getInput("api_url_microcks");
-    const realm = core.getInput("realm_keycloack");
     const apiUrlKeycloak = core.getInput("api_url_keycloack");
     const clientIdMicrocks = core.getInput("client_id_microcks");
     const clientSecretMicrocks = core.getInput("client_secret_microcks");
 
-    const microcksService = new MicrocksApiService(apiUrlMicrocks, realm, apiUrlKeycloak, clientIdMicrocks, clientSecretMicrocks);
+    const microcksService = new MicrocksApiService(apiUrlMicrocks, apiUrlKeycloak, clientIdMicrocks, clientSecretMicrocks);
     const blueprintCatalogService = new BlueprintCatalogService(apiUrlGetPort, clientIdGetPort, clientSecretGetPort);
     const publishContractService = new PublishContractService(filePath, microcksService, blueprintCatalogService);
 
